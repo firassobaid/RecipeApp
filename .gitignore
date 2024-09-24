@@ -16,3 +16,4 @@ local.properties
 bin/
 dist/
 *.vcproj.*
+/.idea/*
