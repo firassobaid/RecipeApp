@@ -43,6 +43,11 @@ class RecipeViewModel @Inject constructor(
                 }
         }
     }
+
+    fun refresh() {
+        _state.update { it.copy(loading = true) }
+        getRecipes()
+    }
 }
 
 data class RecipeState(

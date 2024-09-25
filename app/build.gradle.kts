@@ -68,7 +68,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.converter)
-//    implementation(libs.okhttp3)
+    implementation(libs.coil)
     // Hilt
     implementation(libs.hilt.android.core)
     implementation(libs.androidx.hilt.navigation.compose)
