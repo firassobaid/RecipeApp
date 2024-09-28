@@ -26,14 +26,10 @@ fun LoadingContentError(
 ) {
     val pullRefreshState = rememberPullRefreshState(loading, onRefresh)
     Box(modifier = modifier.fillMaxSize().pullRefresh(pullRefreshState)) {
-        if (error) {
-            errorContent()
-        } else {
-            if (empty) {
-                emptyContent()
-            } else {
-                content()
-            }
+        when {
+            error -> errorContent()
+            empty -> emptyContent()
+            else -> content()
         }
         PullRefreshIndicator(
             refreshing = loading,
