@@ -67,7 +67,7 @@ class RecipeViewModel @Inject constructor(
     }
 
     fun refresh() {
-        _state.update { it.copy(loading = true) }
+        _state.update { it.copy(loading = true, error = false) }
         getRecipes()
     }
 }

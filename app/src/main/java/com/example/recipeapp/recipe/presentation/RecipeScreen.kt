@@ -1,15 +1,15 @@
 package com.example.recipeapp.recipe.presentation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.recipeapp.R
-import com.example.recipeapp.base.component.EmptyComponent
 import com.example.recipeapp.base.component.ErrorComponent
-import com.example.recipeapp.base.component.LoadingContentError
 import com.example.recipeapp.base.component.RecipeTopBar
 import com.example.recipeapp.recipe.domain.model.RecipeResponseItem
 
@@ -49,6 +47,7 @@ fun RecipeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeContent(
     modifier: Modifier = Modifier,
@@ -57,29 +56,29 @@ fun RecipeContent(
     data: List<RecipeResponseItem>?,
     onRefresh: () -> Unit = {}
 ) {
-    Box(
+    val errorMessage = stringResource(R.string.recipe_error_message)
+
+    PullToRefreshBox(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        isRefreshing = loading,
+        onRefresh = onRefresh,
     ) {
-        LoadingContentError(
-            loading = loading,
-            error = error,
-            empty = false,
-            errorContent = { ErrorComponent() },
-            onRefresh = onRefresh,
-            emptyContent = { EmptyComponent() }
-        ) {
-            LazyColumn(
-                modifier = Modifier.align(Alignment.TopCenter)
+        when {
+            error -> ErrorComponent(errorMessage){
+                onRefresh()
+            }
+            else -> LazyColumn(
+                modifier = Modifier.fillMaxSize()
             ) {
                 data?.takeIf { it.isNotEmpty() }?.let {
                     items(it) { item ->
                         RecipeItem(item)
                         HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 8.dp), // Optional padding
-                            thickness = 1.dp, // Customize thickness
-                            color = Color.Gray // Customize color
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            thickness = 1.dp,
+                            color = Color.Gray
                         )
                     }
                 }

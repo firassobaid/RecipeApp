@@ -1,18 +1,13 @@
 package com.example.recipeapp.base.component
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingContentError(
     loading: Boolean,
@@ -24,20 +19,16 @@ fun LoadingContentError(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val pullRefreshState = rememberPullRefreshState(loading, onRefresh)
-    Box(modifier = modifier.fillMaxSize().pullRefresh(pullRefreshState)) {
+    PullToRefreshBox(
+        modifier = modifier.fillMaxSize(),
+        isRefreshing = loading,
+        onRefresh = onRefresh,
+    ) {
         when {
             error -> errorContent()
             empty -> emptyContent()
             else -> content()
         }
-        PullRefreshIndicator(
-            refreshing = loading,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-            backgroundColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        )
     }
 }
 
