@@ -55,7 +55,7 @@ class RecipeViewModel @Inject constructor(
             repository.getRecipes()
                 .onSuccess { result ->
                     _state.update {
-                        it.copy(loading = false, data = result)
+                        it.copy(loading = false, data = result, error = false)
                     }
                 }
                 .onFailure {
@@ -67,7 +67,7 @@ class RecipeViewModel @Inject constructor(
     }
 
     fun refresh() {
-        _state.update { it.copy(loading = true, error = false) }
+        _state.update { it.copy(loading = true) }
         getRecipes()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.recipeapp.recipe.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -57,6 +59,7 @@ fun RecipeContent(
     onRefresh: () -> Unit = {}
 ) {
     val errorMessage = stringResource(R.string.recipe_error_message)
+    val pullToRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
         modifier = modifier
@@ -64,14 +67,21 @@ fun RecipeContent(
             .padding(horizontal = 16.dp),
         isRefreshing = loading,
         onRefresh = onRefresh,
+        state = pullToRefreshState
     ) {
-        when {
-            error -> ErrorComponent(errorMessage){
-                onRefresh()
-            }
-            else -> LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (error) {
+                item {
+                    ErrorComponent(
+                        modifier = Modifier
+                            .fillParentMaxHeight()
+                            .fillMaxWidth(),
+                        errorMessage = errorMessage
+                    )
+                }
+            } else {
                 data?.takeIf { it.isNotEmpty() }?.let {
                     items(it) { item ->
                         RecipeItem(item)
