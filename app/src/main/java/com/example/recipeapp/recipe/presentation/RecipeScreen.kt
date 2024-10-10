@@ -27,6 +27,7 @@ import com.example.recipeapp.recipe.domain.model.RecipeResponseItem
 @Composable
 fun RecipeScreen(
     viewModel: RecipeViewModel = hiltViewModel(),
+    onItemClick: (RecipeResponseItem) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +45,8 @@ fun RecipeScreen(
             loading = state.loading,
             error = state.error,
             data = state.data,
-            onRefresh = viewModel::refresh
+            onRefresh = viewModel::refresh,
+            onItemClick = onItemClick
         )
     }
 }
@@ -56,7 +58,8 @@ fun RecipeContent(
     loading: Boolean,
     error: Boolean,
     data: List<RecipeResponseItem>?,
-    onRefresh: () -> Unit = {}
+    onRefresh: () -> Unit = {},
+    onItemClick: (RecipeResponseItem) -> Unit = {}
 ) {
     val errorMessage = stringResource(R.string.recipe_error_message)
     val pullToRefreshState = rememberPullToRefreshState()
@@ -84,7 +87,9 @@ fun RecipeContent(
             } else {
                 data?.takeIf { it.isNotEmpty() }?.let {
                     items(it) { item ->
-                        RecipeItem(item)
+                        RecipeItem(
+                            recipe = item,
+                            onClick = onItemClick)
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 8.dp),
                             thickness = 1.dp,

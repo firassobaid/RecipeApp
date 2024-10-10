@@ -24,7 +24,7 @@ const val RECIPE_SAVED_STATE_KEY = "RECIPE_SAVED_STATE_KEY"
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
     private val repository: RecipeRepository,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state =
@@ -33,6 +33,7 @@ class RecipeViewModel @Inject constructor(
                 Json.decodeFromString<RecipeState>(it)
             } ?: RecipeState(loading = true)
         )
+
     val state: StateFlow<RecipeState> = _state
         .onStart { getRecipes() }
         .stateIn(

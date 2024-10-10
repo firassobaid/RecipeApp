@@ -1,5 +1,6 @@
 package com.example.recipeapp.recipe.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,12 +24,14 @@ import com.example.recipeapp.recipe.domain.model.RecipeResponseItem
 @Composable
 fun RecipeItem(
     recipe: RecipeResponseItem,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (RecipeResponseItem) -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .padding(16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick(recipe) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(

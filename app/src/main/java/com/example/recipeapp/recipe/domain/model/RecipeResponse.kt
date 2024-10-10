@@ -1,8 +1,11 @@
 package com.example.recipeapp.recipe.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Parcelize
 data class RecipeResponseItem(
     val calories: String,
     val carbos: String,
@@ -17,4 +20,4 @@ data class RecipeResponseItem(
     val proteins: String,
     val thumb: String,
     val time: String
-)
+) : Parcelable

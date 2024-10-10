@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -69,6 +70,7 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.converter)
     implementation(libs.coil)
+    implementation(libs.logging.interceptor)
     // Hilt
     implementation(libs.hilt.android.core)
     implementation(libs.androidx.hilt.navigation.compose)
